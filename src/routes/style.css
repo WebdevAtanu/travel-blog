@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+body {
+	font-family: "Playfair Display", serif;
+}
+
+#nav {
+	background: #c5ddff;
+
+	img {
+		width: 8%;
+	}
+
+}
+
+.menu {
+	background: #c5ddff;
+
+	svg {
+		color: black;
+
+		&:hover {
+			transform: scale(1.1);
+		}
+
+	}
+
+}
+
+.placeCard {
+	border: 0.5px solid black;
+
+	img {
+		border-radius: 1.5rem 1.5rem 0 0;
+	}
+
+}
+
+.about {
+	table tbody tr {
+		td {
+			padding: 0.5rem;
+			border: 1px solid;
+		}
+
+	}
+
+}
