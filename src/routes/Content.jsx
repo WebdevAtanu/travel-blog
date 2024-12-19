@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react';
-import Intro from "./Intro.jsx";
 import './style.css';
 import {Link} from 'react-router-dom'
+import Intro from './Intro';
 
 function Content() {
     const [data, setData] = useState([]);
@@ -10,7 +10,7 @@ function Content() {
 
     useEffect(() => {
     async function fetcher() {
-      const response = await fetch("https://freetestapi.com/api/v1/destinations");
+      const response = await fetch("/api/v1/destinations");
       const jsondata = await response.json();
       setData(jsondata);
       setVisibleItems(jsondata.slice(0, ITEMS_PER_LOAD));
@@ -24,34 +24,45 @@ function Content() {
     };
 
     return (
-        <div>
+        <>
         <Intro/>
-        <h1 className='text-xl bg-gray-200 p-2 mb-5 text-center'>Featured Trips</h1>
+        {
+        visibleItems.length==0?
+        <div className='h-[100vh] flex items-center justify-center'>
+            <h1 className='text-3xl'>CORS is blocking data</h1>
+        </div>
+        :
+        <div>
         <div className="grid md:grid-cols-4 gap-4 p-5">
             {
                 visibleItems.map((item,i)=>{
                     return(
-                        
-                        <div key={i} className='placeCard rounded-3xl'>
-                        <img src={item.image} alt="" className='w-full aspect-video mb-3'/>
-                        <p className='text-3xl mx-5 font-bold'>{item.name}</p>
-                        <p className='mx-5'>{item.country}</p>
-                        <p className='mx-5'>{item.description.slice(0,100)}...</p>
-                         <Link to={`/place/${item.name}`} state={item}><p className='m-5 float-right font-bold text-blue-900 flex items-center gap-1 hover:text-blue-600'>KNOW MORE <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-right-circle" viewBox="0 0 16 16">
-                            <path fillRule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
-                            </svg></p></Link>
+                        <Link to={`/place/${item.name}`} state={item} key={i}>
+                        <div className='border border-black cursor-pointer group'>
+                        <div className="w-full aspect-video overflow-hidden">
+                        <img src={item.image} alt="" className='group-hover:scale-110 duration-100'/>
                         </div>
+                        <div className="m-3">
+                        <p className='text-3xl font-bold'>{item.name}</p>
+                        <p className=''>{item.country}</p>
+                        <p className=''>{item.description.slice(0,100)}...</p>
+                        <p className='font-bold text-right text-sm mt-2 group-hover:text-blue-900'>KNOW MORE</p>
+                        </div>
+                        </div>
+                        </Link>
                         )
                 })
             }
 
         </div>
         {visibleItems.length < data.length && (
-            <div className='text-center p-12'>
-        <button onClick={loadMore} className='text-xl border border-black p-1'>Load More</button>
+        <div className='text-center p-6'>
+        <button onClick={loadMore} className='border border-black px-5 py-1 rounded hover:bg-slate-900 hover:text-white'>Load More</button>
         </div>
         )}
         </div>
+        }
+        </>
     )
 }
 
